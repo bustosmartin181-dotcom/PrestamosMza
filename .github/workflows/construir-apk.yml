@@ -33,9 +33,13 @@ jobs:
           node --check /tmp/app.js
       - name: Crear iconos (usa los tuyos si estan en el repo)
         continue-on-error: true
+        timeout-minutes: 5
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq imagemagick
+          if ! command -v convert >/dev/null 2>&1; then
+            timeout 120 sudo apt-get update -qq || true
+            timeout 180 sudo apt-get install -y -qq imagemagick || true
+          fi
+          command -v convert || echo "ImageMagick no disponible: se usan los iconos por defecto"
           if [ -f icon-only.png ] && [ -f icon-foreground.png ] && [ -f icon-background.png ]; then
             echo "Usando los iconos del repositorio"
             cp icon-only.png icon-foreground.png icon-background.png assets/
