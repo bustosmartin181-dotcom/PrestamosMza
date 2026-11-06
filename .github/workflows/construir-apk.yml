@@ -66,6 +66,7 @@ jobs:
           F=android/app/src/main/AndroidManifest.xml
           grep -q POST_NOTIFICATIONS $F || sed -i 's#</manifest>#    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n</manifest>#' $F
           grep -q RECEIVE_BOOT_COMPLETED $F || sed -i 's#</manifest>#    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />\n</manifest>#' $F
+          grep -q com.mercadopago.wallet $F || sed -i 's#</manifest>#    <queries><package android:name="com.mercadopago.wallet" /></queries>\n</manifest>#' $F
       - name: Numerar la version
         run: |
           sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
