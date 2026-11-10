@@ -73,7 +73,7 @@ button.x.mini{padding:5px 10px;border:1.5px dashed var(--bd)}
 @keyframes neonGlow{0%,100%{box-shadow:0 0 14px rgba(245,158,11,.3),0 0 28px rgba(30,95,168,.18);border-color:rgba(245,158,11,.65)}50%{box-shadow:0 0 24px rgba(245,158,11,.55),0 0 44px rgba(30,95,168,.35);border-color:rgba(251,191,36,.95)}}
 .cartel-iluminado{animation:neonGlow 3s ease-in-out infinite;background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(254,243,199,.88));border:1.8px solid rgba(245,158,11,.8);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:all .4s ease}
 :root[data-theme="dark"] .cartel-iluminado{background:linear-gradient(135deg,rgba(30,36,33,.96),rgba(45,34,18,.92))}
-.pill-donar{position:fixed;bottom:92px;left:18px;background:var(--card);border:1.5px solid rgba(245,158,11,.8);box-shadow:0 4px 18px rgba(245,158,11,.3);border-radius:999px;padding:8px 14px;font-size:.8125rem;font-weight:700;display:flex;align-items:center;gap:6px;z-index:11;cursor:pointer}
+.pill-donar{position:fixed;bottom:calc(96px + env(safe-area-inset-bottom,0px));left:14px;background:var(--card);color:var(--tx);border:1.5px solid #f59e0b;box-shadow:0 4px 14px rgba(245,158,11,.28);border-radius:999px;padding:6px 12px;font-size:.75rem;font-weight:700;display:flex;align-items:center;gap:5px;z-index:11;cursor:pointer;white-space:nowrap}
 .btn-mp{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;color:#009EE3;border:2px solid #009EE3;margin-top:8px;padding:8px 14px;font-weight:700}
 .btn-mp img{height:38px;width:auto;display:block}
 .btn-mp span{font-size:14px;white-space:nowrap}
@@ -84,13 +84,13 @@ button.x.mini{padding:5px 10px;border:1.5px dashed var(--bd)}
 <main id="m"><div style="padding:38vh 20px 0;text-align:center;color:var(--mut)">Cargando Mis préstamos…</div></main>
 <nav><button data-t="hoy">Hoy</button><button data-t="clientes">Clientes</button><button data-t="prestamos">Préstamos</button><button data-t="caja">Caja</button><button data-t="ajustes">Ajustes</button></nav>
 <button id="fab" class="fab" aria-label="Nuevo préstamo" data-a="nuevoPrest">＋</button>
-<div id="donarPill" class="pill-donar" style="display:none" data-a="abrirDonar">☕ Donar <span style="font-family:monospace;font-size:11px;opacity:.9">MartinchoLujanino</span></div>
+<div id="donarPill" class="pill-donar" style="display:none" data-a="abrirDonar">☕ Ayudemos al creador</div>
 <script>
 window.addEventListener('error',function(e){var m=document.getElementById('m');if(m&&!window.__ok)m.innerHTML='<div style="padding:30px 20px"><b>Algo salió mal al abrir la app</b><br><br>'+String(e.message||e).replace(/</g,'&lt;')+'<br><br><small>Sacale una captura y mandásela a Claude.</small></div>'});
 window.addEventListener('unhandledrejection',function(e){console.error(e.reason)});
 </script>
 <script>
-const KEY='prestamos_v1',MS=864e5,VERSION='1.3.4';
+const KEY='prestamos_v1',MS=864e5,VERSION='1.3.5';
 const AUTOR='Martín Enrique Bustos',AUTOR_EMAIL='bustosmartin181@gmail.com',AUTOR_WA='5492612168515',AUTOR_ALIAS='MartinchoLujanino';
 const pieCopyright=()=>`<div class="copyright">© 2026 ${AUTOR}</div>`;
 const $=id=>document.getElementById(id);
@@ -163,10 +163,10 @@ function cartelDonacionHTML(){
       </div>
     </div>
     <div class="mut" style="font-size:.84rem;line-height:1.35;margin-bottom:8px">Desarrollada por <b>${AUTOR}</b> para ordenar tus cobros sin costo ni anuncios. Si te sirve, podés darme una mano con un aporte:</div>
-    <div style="background:var(--card);border:1.5px solid rgba(245,158,11,.7);border-radius:12px;padding:9px;display:flex;justify-content:space-between;align-items:center;gap:6px">
+    <div style="background:var(--card);border:1.5px solid rgba(245,158,11,.7);border-radius:12px;padding:9px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px">
       <div>
         <div style="font-size:10px;font-weight:700;color:var(--warn);text-transform:uppercase">Alias Mercado Pago / Banco:</div>
-        <div style="font-family:monospace;font-weight:900;font-size:1.15rem">${AUTOR_ALIAS}</div>
+        <div style="font-family:monospace;font-weight:900;font-size:1.05rem">${AUTOR_ALIAS}</div>
       </div>
       <div style="display:flex;gap:4px">
         <button class="mini" data-a="copiarAlias" style="background:#f59e0b;color:#000;font-weight:700">Copiar</button>
@@ -326,6 +326,7 @@ function pAjustes(){
 
 function dibujar(){try{aplicarTema();const nav=document.querySelector('nav'),fab=$('fab'),m=$('m');
   document.body.classList.toggle('sin-degradado',bloqueada||!S.bienvenida);
+  const pill=$('donarPill');if(pill)pill.style.display=(bloqueada||!S.bienvenida)?'none':'flex';
   if(bloqueada){nav.style.display=fab.style.display='none';m.innerHTML=pBloqueo();return}
   if(!S.bienvenida){nav.style.display=fab.style.display='none';m.innerHTML=(UI.paso>=1?progreso(UI.paso):'')+pBienvenida();return}
   nav.style.display=fab.style.display='';
